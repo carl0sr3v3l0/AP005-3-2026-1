@@ -1,0 +1,28 @@
+from machine import Pin
+import time
+
+boton = Pin(27,Pin.IN,)
+
+led_pins = [15, 2, 0, 4, 16, 17, 5, 18]
+
+leds = [Pin(p, Pin.OUT) for p in led_pins]
+while True:
+    if boton.value() == 0:
+        inicio = time.ticks_ms()
+        while boton.value() == 0:
+            pass
+            duracion = time.ticks_diff(time.ticks_ms(), inicio)
+            if duracion < 500:
+                for led in leds:
+                    led.value(1)
+                    print(f'Pin {led} on')
+                    time.sleep(0.2)
+        
+                    led.value(0)
+                    print(f'Pin {led} off')
+                    time.sleep(0.2)  
+            else:
+                for led in leds:
+                    led.value(1 - led.value())
+                    time.sleep(0.3)
+                  

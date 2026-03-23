@@ -1,0 +1,122 @@
+print("Bienvenido al Sistema de Inventario UD SIUD")
+categorias = ("Alimentos perecederos",
+              "Alimentos no perecederos", 
+              "Lacteos y Refrigerados",
+              "Bebidas",
+              "Congelados",
+              "Cuidado Personal y Salud", 
+              "Limpieza y Hogar"
+              )
+inventario = []
+while True:
+    print ("1. Agregar producto")
+    print ("2. Mostrar productos")
+    print ("3. Buscar producto")
+    print ("4. Eliminar producto")
+    print ("5. Salir")
+    selector = input("opciones: ")
+
+    if selector == "1":
+        while True:
+            try:
+                Codigo = int(input("Código: "))
+            except ValueError:
+                print("Entrada inválida")
+                continue
+            comp = False
+            for p in inventario:
+                if p["codigo"] == Codigo:
+                    comp = True
+                    break
+            if comp:
+                print("el código ya esta registrado para otro artículo")
+            else:
+                Nombre = input("Nombre: ")
+                while True:
+                    try:
+                        Precio = float(input("Precio: "))
+                        if Precio < 0:
+                            print("El precio no puede ser negativo")
+                            continue
+                        break
+                    except ValueError:
+                        print("Entrada inválida, ingrese un número")
+                while True:
+                    try:
+                        Cantidad = int(input("Cantidad: "))
+                        if Cantidad < 0:
+                            print("La cantidad no puede ser negativa")
+                            continue
+                        break
+                    except ValueError:
+                        print("Entrada inválida, ingrese un número entero")
+                        
+                for i, c in enumerate(categorias, 1):
+                    print(f"{i}. {c}")
+
+                op = int(input("Seleccione categoría: "))
+                cat = categorias[op-1]
+        
+                if cat in categorias:
+                    nuevo_producto = {
+                        "codigo": Codigo,
+                        "nombre": Nombre,
+                        "precio": Precio, 
+                        "cantidad": Cantidad,
+                        "categoria": cat
+                    }
+                    inventario.append(nuevo_producto) # Guardar en la lista
+                    print("Producto agregado con éxito.")
+                else: 
+                    print("Categoría inválida")
+            if input("Agregar un nuevo artículo? s/n: ") != "s":
+                break
+    elif selector == "2":
+        while True:
+            if not inventario:
+                print("no hay artículos en el inventario")
+            else:
+                inventario.sort(key = lambda x: x['codigo'])
+                for p in inventario:
+                    print(f"{p['codigo']} - Producto: {p['nombre']} - Cantidad: {p['cantidad']} - Categoría: {p['categoria']} - Precio: {p['precio']}")
+            if input("salir del inventario? s/n: ") != "s":
+                break
+    elif selector == "3":
+        while True:
+            print("Buscar Producto")
+            codigo_b = int(input("Ingrese el código del producto: "))
+            busqueda = False
+
+            for producto in inventario:
+                if producto["codigo"] == codigo_b:
+                    print("Producto encontrado")
+                    print(f"Nombre: {producto['nombre']}")
+                    print(f"Precio: {producto['precio']}")
+                    print(f"Cantidad: {producto['cantidad']}")
+                    print(f"Categoría: {producto['categoria']}")
+                    busqueda = True
+                    break
+            if not busqueda:
+                print("Producto no encontrado")
+            if input("Buscar otro producto? s/n: ") != "s":
+                break
+    elif selector == "4":
+        while True:
+            print("Eliminar producto")
+            eliminar = int(input("Ingrese el código del producto a eliminar:"))
+
+            busqueda = False
+
+            for i in range(len(inventario)):
+                if inventario[i]["codigo"] == eliminar:
+                    producto_borrado = inventario.pop(i)
+                    print(f"el producto '{producto_borrado['nombre']}' ha sido eliminado")
+                    busqueda = True
+                    break
+            if not busqueda :
+                print("Producto no encontrado")
+            if input("Eliminar otro producto? s/n: ") != "s":
+                break
+    else: 
+        print("Gracias por usar el sistema de inventario UD SIUD")
+        break
